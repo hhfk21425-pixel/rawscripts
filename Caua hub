@@ -1,0 +1,104 @@
+--// UI Library Bonitassa - Rayfield
+local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+
+local Window = Rayfield:CreateWindow({
+   Name = "Build A Boat Hub | by Cauã & Arthur",
+   LoadingTitle = "Carregando HUB...",
+   LoadingSubtitle = "Feito especialmente para você 😎",
+   Theme = "Dark", -- Dark / Amethyst / Ocean / Light
+})
+
+---------------------------------------------------------------------
+-- ABA PRINCIPAL (MAIN)
+---------------------------------------------------------------------
+local MainTab = Window:CreateTab("Main", 4483362458)
+local Section = MainTab:CreateSection("Funções Principais")
+
+-- Auto Farm (Build A Boat)
+MainTab:CreateToggle({
+   Name = "Auto Farm (Gold)",
+   CurrentValue = false,
+   Flag = "AutoFarm",
+   Callback = function(v)
+      _G.AutoFarm = v
+      while _G.AutoFarm do
+         task.wait(1)
+
+         local player = game.Players.LocalPlayer
+         local char = player.Character or player.CharacterAdded:Wait()
+         local hrp = char:WaitForChild("HumanoidRootPart")
+
+         -- Teleporta até o final do mapa (Build A Boat)
+         hrp.CFrame = CFrame.new(0, 200, 9500)
+         task.wait(3)
+      end
+   end,
+})
+
+MainTab:CreateButton({
+   Name = "Teleportar para o Início",
+   Callback = function()
+      local p = game.Players.LocalPlayer
+      local hrp = p.Character:FindFirstChild("HumanoidRootPart")
+      if hrp then
+         hrp.CFrame = CFrame.new(0, 20, 100)
+      end
+   end,
+})
+
+MainTab:CreateSlider({
+   Name = "Velocidade do Player",
+   Range = {16, 200},
+   Increment = 1,
+   Suffix = "Speed",
+   CurrentValue = 16,
+   Callback = function(speed)
+      pcall(function()
+         game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = speed
+      end)
+   end,
+})
+
+---------------------------------------------------------------------
+-- ABA DE UTILIDADES (MISC)
+---------------------------------------------------------------------
+local MiscTab = Window:CreateTab("Misc", 4483362458)
+local section2 = MiscTab:CreateSection("Ferramentas Úteis")
+
+MiscTab:CreateButton({
+   Name = "Remover Água (Lag Reducer)",
+   Callback = function()
+      for _, v in pairs(workspace:GetDescendants()) do
+         if v.Name == "Water" then
+            v:Destroy()
+         end
+      end
+   end,
+})
+
+MiscTab:CreateToggle({
+   Name = "NoClip",
+   CurrentValue = false,
+   Callback = function(v)
+      _G.NoClip = v
+      game:GetService("RunService").Stepped:Connect(function()
+         local char = game.Players.LocalPlayer.Character
+         if char and _G.NoClip then
+            for _, part in ipairs(char:GetChildren()) do
+               if part:IsA("BasePart") then
+                  part.CanCollide = false
+               end
+            end
+         end
+      end)
+   end,
+})
+
+---------------------------------------------------------------------
+-- ABA DE CRÉDITOS
+---------------------------------------------------------------------
+local CreditTab = Window:CreateTab("Credits", 4483362458)
+CreditTab:CreateLabel("🌟 Criadores do HUB:")
+CreditTab:CreateLabel("• Cauã")
+CreditTab:CreateLabel("• Arthur")
+CreditTab:CreateLabel("Obrigado por usar o HUB! 😎🔥")
